@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun doStuff() {
+        realm.beginTransaction()
         val queryResult = realm.where<ChangingPerson>()
                 .equalTo("name", NAME)
                 ?.findAll()
@@ -46,14 +47,13 @@ class MainActivity : AppCompatActivity() {
                     messageText.text = "Creating $NAME"
                     val person = ChangingPerson()
                     person.name = NAME
-                    realm.beginTransaction()
                     realm.copyToRealm(person)
-                    realm.commitTransaction()
                 }
                 1 -> messageText.text = "Found $NAME"
                 else -> messageText.text = "Unexpected Error"
             }
         }
+        realm.commitTransaction()
     }
 
     override fun onDestroy() {
